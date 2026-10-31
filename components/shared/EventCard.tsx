@@ -5,7 +5,7 @@ import { eventTypes } from "@/lib/eventTypes";
 import { Button } from "@/components/ui/button";
 
 // date is already formatted text, e.g. "Mon, 12 Oct 2026"
-// without href the button does nothing (used by the live preview)
+// without href there is no button (used by the live preview)
 export default function EventCard({ title, type, location, date, thumbnail, href }:
     { title: string, type: string, location: string, date: string, thumbnail?: string, href?: string }) {
     const eventType = eventTypes.find((item) => item.value === type);
@@ -38,15 +38,12 @@ export default function EventCard({ title, type, location, date, thumbnail, href
                     <p className="flex items-center gap-2"><CalendarDays className="size-4 shrink-0" /> {date}</p>
                 </div>
 
-                {/* {href ?
+                {/* only real event cards get the button, the live preview has no href */}
+                {href &&
                     <Button size="lg" nativeButton={false} render={<Link href={href} />} className="w-full mt-auto">
                         View Event <ArrowRight />
                     </Button>
-                    :
-                    <Button type="button" size="lg" className="w-full mt-auto">
-                        View Event <ArrowRight />
-                    </Button>
-                } */}
+                }
             </div>
         </div>
     )

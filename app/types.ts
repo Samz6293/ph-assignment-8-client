@@ -41,3 +41,18 @@ export interface EventFormData {
     description: string
     hostEmail: string
 }
+
+export interface HostEventDeatails {
+    title: string
+    type: string 
+    date: string
+    location:string
+    thumbnail: string
+    description:string 
+    hostEmail:string
+    hostName: string
+}
+
+export interface EventData extends HostEventDeatails {
+    _id: string
+}

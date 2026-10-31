@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Image from "next/image";
 import volunteers from "@/public/volunteers.jpg";
 import RegisterForm from "@/components/auth/RegisterForm";
@@ -63,7 +64,10 @@ export default function RegisterPage() {
                         <div className="relative mb-10">
                             <Image src={volunteers} alt="Four smiling volunteers in matching t-shirts" placeholder="blur" sizes="500px"
                                 className="w-full h-56 object-cover rounded-card" />
-                            <NextUpCard className="absolute -right-4 -bottom-12 max-w-xs" />
+                            {/* fetches the soonest event, so it needs Suspense */}
+                            <Suspense>
+                                <NextUpCard className="absolute -right-4 -bottom-12 max-w-xs" />
+                            </Suspense>
                         </div>
                     </div>
                 </div>

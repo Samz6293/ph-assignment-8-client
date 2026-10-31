@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Wifi } from "lucide-react";
 import LoginForm from "@/components/auth/LoginForm";
 import NextUpCard from "@/components/shared/NextUpCard";
@@ -43,7 +44,10 @@ export default function LoginPage() {
                             </p>
                         </div>
 
-                        <NextUpCard className="relative max-w-xs" />
+                        {/* fetches the soonest event, so it needs Suspense */}
+                        <Suspense>
+                            <NextUpCard className="relative max-w-xs" />
+                        </Suspense>
                     </div>
 
                     {/* form side */}

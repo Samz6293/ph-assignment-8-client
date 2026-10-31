@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -83,8 +84,11 @@ export default function Hero() {
                         className="absolute bottom-0 left-0 hidden w-[45%] h-[42%] object-cover border-4 border-card rounded-card shadow-float
                         md:block" />
 
-                    <NextUpCard className="absolute right-0 bottom-0 left-6
-                        sm:left-auto sm:max-w-xs md:right-4 md:bottom-4" />
+                    {/* fetches the soonest event, so it needs Suspense */}
+                    <Suspense>
+                        <NextUpCard className="absolute right-0 bottom-0 left-6
+                            sm:left-auto sm:max-w-xs md:right-4 md:bottom-4" />
+                    </Suspense>
                 </div>
             </div>
         </section>

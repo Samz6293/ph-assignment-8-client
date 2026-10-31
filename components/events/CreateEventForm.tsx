@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CalendarDays, CircleAlert, ImageIcon, Lock, MapPin } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { eventTypes } from "@/lib/eventTypes";
@@ -13,10 +14,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import EventCard from "@/components/shared/EventCard";
+import { handleHostEvent } from "@/lib/fetch";
 
 export default function CreateEventForm() {
     const { data: session } = authClient.useSession();
     const hostEmail = session?.user.email || "";
+    const hostName = session?.user.name || "";
 
     const [title, setTitle] = useState("");
     const [type, setType] = useState("");
@@ -26,6 +29,7 @@ export default function CreateEventForm() {
     const [description, setDescription] = useState("");
     const [dateOpen, setDateOpen] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const router = useRouter();
 
     // error messages ("" means the field is fine)
     const titleError = title.trim().length < 5 ? "Title needs at least 5 characters." : "";
@@ -43,16 +47,18 @@ export default function CreateEventForm() {
     const showThumbnailError = (thumbnail !== "" || submitted) && thumbnailError;
     const showDescriptionError = (description !== "" || submitted) && descriptionError;
 
-    const handleCreateEvent = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleCreateEvent = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setSubmitted(true);
 
         // stop here if anything is invalid, the errors show under the inputs
         if (titleError || typeError || dateError || locationError || thumbnailError || descriptionError) return;
 
-        // TODO: send this to the server instead of just logging it
-        const formData = { title, type, date: date!.toISOString(), location, thumbnail, description, hostEmail };
-        console.log(formData);
+        const hostEventDetails = { title, type, date: date!.toISOString(), location, thumbnail, description, hostEmail, hostName };
+        const success = await handleHostEvent(hostEventDetails);
+
+        // assignment: after creating, go to the Upcoming Events page
+        if (success) router.push("/upcoming-events");
     }
 
     return (
