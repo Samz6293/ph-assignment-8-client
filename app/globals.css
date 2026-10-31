@@ -5,40 +5,55 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Fonts — variables injected by next/font in app/layout.tsx */
+  --font-sans: var(--font-dm-sans, ui-sans-serif, system-ui, sans-serif);
+  --font-heading: var(--font-bricolage, var(--font-sans, ui-sans-serif));
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Core semantic tokens (Beacon values set in :root / .dark below) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Beacon design-name aliases (design-doc classes: text-ink, text-on-primary, border-line, text-link) */
+  --color-ink: var(--foreground);
+  --color-on-primary: var(--primary-foreground);
+  --color-line: var(--border);
+  --color-link: var(--link);
+
+  /* Beacon extras */
+  --color-surface: var(--surface);
+  --color-soft: var(--soft);
+  --color-footer: var(--footer);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+
+  /* Event type tints (chips, thumbnail placeholders) */
+  --color-tint-donation: #ffe3d3;
+  --color-tint-cleanup: #dceef4;
+  --color-tint-plantation: #dff0dc;
+  --color-tint-health: #fbe0e4;
+  --color-tint-education: #fceecf;
+
+  /* Radii — base feeds the shadcn scale; named radii match the design spec */
+  --radius: 0.875rem;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -46,75 +61,74 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-field: 0.875rem;
+  --radius-card: 1.25rem;
+  --radius-panel: 1.5rem;
+  --radius-hero: 1.75rem;
+  --radius-band: 2rem;
+
+  /* Shadows — only for floating elements */
+  --shadow-menu: 0 10px 30px -8px rgb(0 0 0 / 0.18);
+  --shadow-toast: 0 8px 24px -6px rgb(0 0 0 / 0.16);
+  --shadow-float: 0 18px 44px -14px rgb(28 25 23 / 0.25);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #ffffff;
+  --foreground: #1c1917;
+  --surface: #fafaf9;
+  --soft: #fff4ee;
+  --card: #ffffff;
+  --card-foreground: #1c1917;
+  --popover: #ffffff;
+  --popover-foreground: #1c1917;
+  --primary: #ff8559;
+  --primary-foreground: #1c1917;
+  --secondary: #fff4ee;
+  --secondary-foreground: #1c1917;
+  --muted: #fafaf9;
+  --muted-foreground: #57534e;
+  --accent: #fff4ee;
+  --accent-foreground: #1c1917;
+  --destructive: #b42318;
+  --link: #c24e22;
+  --border: #ece6e1;
+  --input: #ddd5ce;
+  --ring: #ff8559;
+  --danger: #b42318;
+  --danger-bg: #fef3f2;
+  --success: #166534;
+  --success-bg: #dcfce7;
+  --footer: #1c1917;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #15120f;
+  --foreground: #f5f1ec;
+  --surface: #1c1712;
+  --soft: #1f1813;
+  --card: #1f1b17;
+  --card-foreground: #f5f1ec;
+  --popover: #1f1b17;
+  --popover-foreground: #f5f1ec;
+  --primary: #ff8559;
+  --primary-foreground: #1c1917;
+  --secondary: #1f1813;
+  --secondary-foreground: #f5f1ec;
+  --muted: #1c1712;
+  --muted-foreground: #b8b0a8;
+  --accent: #272019;
+  --accent-foreground: #f5f1ec;
+  --destructive: #f97066;
+  --link: #ff8559;
+  --border: #2e2924;
+  --input: #3a332d;
+  --ring: #ff8559;
+  --danger: #f97066;
+  --danger-bg: #3b1714;
+  --success: #4ade80;
+  --success-bg: #14301f;
+  --footer: #0e0c0a;
 }
 
 @layer base {
@@ -126,5 +140,194 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+/*
+  Beacon component classes.
+  Note: this Tailwind v4 setup rejects arbitrary-value classes inside @apply
+  (e.g. `@apply text-[48px]`), so sized declarations are plain CSS here.
+  Design-doc name swaps: text-muted -> text-muted-foreground, text-accent -> text-link.
+*/
+@layer components {
+  /* Layout -------------------------------------------------------------- */
+  .container-page {
+    @apply mx-auto w-full px-6;
+    max-width: 1240px;
+  }
+
+  /* Typography (mobile / desktop at md) ---------------------------------- */
+  .h-hero,
+  .h-page,
+  .h-section,
+  .h-card {
+    font-family: var(--font-bricolage, var(--font-dm-sans, ui-sans-serif, system-ui, sans-serif));
+    letter-spacing: -0.02em;
+    color: var(--foreground);
+  }
+  .h-hero {
+    font-size: 48px;
+    line-height: 1.05;
+    font-weight: 800;
+  }
+  .h-page {
+    font-size: 36px;
+    line-height: 1.08;
+    font-weight: 800;
+  }
+  .h-section {
+    font-size: 30px;
+    line-height: 1.1;
+    font-weight: 800;
+  }
+  .h-card {
+    font-size: 21px;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  @media (min-width: 768px) {
+    .h-hero {
+      font-size: 64px;
+    }
+    .h-page {
+      font-size: 52px;
+    }
+    .h-section {
+      font-size: 44px;
+    }
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--link);
+  }
+  .lead {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+  }
+  .field-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--foreground);
+  }
+
+  /* Buttons — pill shape, min 48px tall, dark ink on coral --------------- */
+  .btn {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-inline: 24px;
+    border: 0;
+    border-radius: 9999px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 60%, transparent);
+  }
+  .btn:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .btn-primary:hover {
+    background-color: color-mix(in srgb, var(--primary) 88%, #000);
+  }
+  .btn-outline {
+    background-color: transparent;
+    border: 1px solid color-mix(in srgb, var(--foreground) 70%, transparent);
+    color: var(--foreground);
+  }
+  .btn-outline:hover {
+    background-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+  }
+  .btn-danger {
+    background-color: var(--danger);
+    color: #ffffff;
+  }
+  .btn-danger:hover {
+    background-color: color-mix(in srgb, var(--danger) 88%, #000);
+  }
+  .dark .btn-danger {
+    color: #1f0b08;
+  }
+
+  /* Forms — 52px tall, coral focus ring --------------------------------- */
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 52px;
+    border-radius: var(--radius-field);
+    border: 1px solid var(--input);
+    background-color: var(--card);
+    padding-inline: 16px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--foreground);
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+    outline: none;
+  }
+  .field::placeholder {
+    color: var(--muted-foreground);
+  }
+  .field:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent);
+  }
+  .field-error {
+    border-color: var(--danger);
+  }
+  .field-error:focus {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 25%, transparent);
+  }
+  .error-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--danger);
+  }
+
+  /* Loading -------------------------------------------------------------- */
+  .skeleton {
+    @apply animate-pulse;
+    border-radius: var(--radius-card);
+    background-color: var(--muted);
+  }
+
+  /* Beacon rings motif — decoration only, mark up with aria-hidden ------- */
+  .beacon-rings {
+    pointer-events: none;
+    user-select: none;
+    background-image: repeating-radial-gradient(
+      circle at center,
+      transparent 0,
+      transparent 47px,
+      color-mix(in srgb, var(--border) 75%, transparent) 47px,
+      color-mix(in srgb, var(--border) 75%, transparent) 48px
+    );
   }
 }
