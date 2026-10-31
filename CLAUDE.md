@@ -17,6 +17,7 @@ No test runner is configured.
 
 - **Next.js 16.4 / React 19.3, App Router only** (`app/`). Per AGENTS.md, this Next version differs from training data — check `node_modules/next/dist/docs/` (`01-app/`, `03-architecture/`) before using Next APIs.
 - `next.config.ts` enables `cacheComponents`, `partialPrefetching`, and `experimental.agentFeedback`. With Cache Components on, dynamic data access must be wrapped in `<Suspense>` or opted into caching with `"use cache"` — read the docs before fetching data in pages/layouts.
+- Current date/time (`new Date()`) breaks the prerender. All date logic goes through `lib/date.ts` (`getToday`, `getTomorrow`, `getCurrentYear`, `isAfterToday`, `formatDate`). In a server component, use it inside a `"use cache"` + `cacheLife(...)` scope (see `Footer`); a client component that uses it must be wrapped in `<Suspense>` by its page (see `app/create-event/page.tsx`).
 - Route props use the global generated types (e.g. `LayoutProps<"/">`, `PageProps<"/path">`) rather than hand-written prop types.
 - Tailwind CSS v4 is CSS-first: there is no `tailwind.config`. Tailwind is wired through a Turbopack loader rule (`@tailwindcss/turbopack`) in `next.config.ts`, not PostCSS.
 - Path alias `@/*` → repo root.
@@ -50,8 +51,9 @@ The user is a beginner — keep code simple and readable; no clever abstractions
 ## UI / styling architecture
 
 - **shadcn/ui, `base-nova` style, built on `@base-ui/react`** (not Radix). Add components with `npx shadcn add <name>`; they land in `components/ui/`. Icons: `lucide-react`.
-- **Always use a shadcn component when one fits** (add with `npx shadcn add <name>`; answer "no" to overwrite prompts so the customized files aren't replaced). Customized to the Beacon look in `components/ui/`: `Input` and `InputGroup` (52px / `rounded-field` / coral focus ring — use `InputGroup` for inputs with icons or a show-password button), `Label` (bold), `Button size="lg"` (48px coral pill). Don't re-add those styles per form. Use `aria-invalid` on inputs for the error state.
+- **Always use a shadcn component when one fits** (add with `npx shadcn add <name>`; answer "no" to overwrite prompts so the customized files aren't replaced). Customized to the Beacon look in `components/ui/`: `Input`, `InputGroup`, `Select` trigger and `Textarea` (52px / `rounded-field` / coral focus ring — use `InputGroup` for inputs with icons or a show-password button), `Label` (bold), `Button size="lg"` (48px coral pill). Don't re-add those styles per form. Use `aria-invalid` on inputs for the error state.
 - Form structure: `<form>` → `FieldGroup` → `Field` (`FieldLabel` + `InputGroup` + optional `FieldError`), `FieldSeparator` for "or" dividers. `components/auth/LoginForm.tsx` / `RegisterForm.tsx` are the reference examples.
+- Events: types (value, label, tint class) live in `lib/eventTypes.ts`; `components/shared/EventCard.tsx` is the one event card (create-event live preview now, events grid/home later); the date picker is shadcn `Popover` + `Calendar` with `disabled={{ before: getTomorrow() }}`. Event tint colors (`bg-tint-*`) are theme-aware CSS variables.
 - Decorative rings are inline SVG `<circle>`s with `vectorEffect="non-scaling-stroke"` (the CSS `beacon-rings` gradient looks pixelated — don't use it).
 - `cn` comes from the `cn` npm package — `lib/utils.ts` just re-exports it. Generated components may import from `"cn"` directly.
 - **`app/globals.css` is the design system ("Beacon")**:

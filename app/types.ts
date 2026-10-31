@@ -20,3 +20,19 @@ export interface LoginFormData {
     email: string
     password: string
 }
+
+export interface EventType {
+    value: string
+    label: string
+    tint: string
+}
+
+export interface EventFormData {
+    title: string
+    type: string
+    date: string
+    location: string
+    thumbnail: string
+    description: string
+    hostEmail: string
+}

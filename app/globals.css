@@ -47,11 +47,11 @@
   --color-success-bg: var(--success-bg);
 
   /* Event type tints (chips, thumbnail placeholders) */
-  --color-tint-donation: #ffe3d3;
-  --color-tint-cleanup: #dceef4;
-  --color-tint-plantation: #dff0dc;
-  --color-tint-health: #fbe0e4;
-  --color-tint-education: #fceecf;
+  --color-tint-donation: var(--tint-donation);
+  --color-tint-cleanup: var(--tint-cleanup);
+  --color-tint-plantation: var(--tint-plantation);
+  --color-tint-health: var(--tint-health);
+  --color-tint-education: var(--tint-education);
 
   /* Radii — base feeds the shadcn scale; named radii match the design spec */
   --radius: 0.875rem;
@@ -102,6 +102,11 @@
   --success-bg: #dcfce7;
   --footer: #1c1917;
   --autofill: #e8f0fe;
+  --tint-donation: #ffe3d3;
+  --tint-cleanup: #dceef4;
+  --tint-plantation: #dff0dc;
+  --tint-health: #fbe0e4;
+  --tint-education: #fceecf;
 }
 
 .dark {
@@ -132,6 +137,11 @@
   --success-bg: #14301f;
   --footer: #0e0c0a;
   --autofill: #1e2733;
+  --tint-donation: #3a2418;
+  --tint-cleanup: #16303a;
+  --tint-plantation: #1b3320;
+  --tint-health: #3a1d24;
+  --tint-education: #3a3018;
 }
 
 @layer base {

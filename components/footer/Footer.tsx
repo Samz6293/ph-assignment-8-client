@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 import { Wifi } from "lucide-react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { navLinks, yourSpaceLinks } from "@/lib/navlinks";
+import { getCurrentYear } from "@/lib/date";
 
 // the footer is dark in both themes, so it uses fixed stone colors instead of theme colors
 const exploreLinks = [...navLinks, { label: "Gallery", href: "/#gallery" }];
@@ -11,7 +13,9 @@ const socialLinks = [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/sabbir-sameer/", icon: <FaLinkedinIn /> },
 ];
 
-export default function Footer() {
+export default async function Footer() {
+    "use cache";
+    cacheLife("days");
     return (
         <footer className="bg-footer text-stone-100 border-t-6 border-primary">
             <div className="container-page pt-14 pb-8">
@@ -60,7 +64,7 @@ export default function Footer() {
 
                 {/* copyright */}
                 <div className="text-stone-400 border-t border-stone-800 mt-10 pt-8 text-sm">
-                    © 2026 Beacon. Built for neighbors who show up.
+                    © {getCurrentYear()} Beacon. Built for neighbors who show up.
                 </div>
             </div>
         </footer>
