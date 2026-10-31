@@ -22,6 +22,30 @@ No test runner is configured.
 - Path alias `@/*` → repo root.
 - This is the client half of the project; the API lives in the sibling repo `../ph-assignment-8-server`.
 
+## Code style (match the user's own style)
+
+The user is a beginner — keep code simple and readable; no clever abstractions. Style is taken from their previous project (`../../ph-assignment-7`):
+
+- The user's components live in `app/components/` (shadcn primitives stay in root `components/ui/`).
+- One component per file, PascalCase filename, `export default function Name() {}` (not arrow functions).
+- Props typed inline: `({ className, links }: { className?: string, links: NavLink[] })`. Shared data shapes go in a `types.ts` as `interface`s.
+- Split UI into a few meaningful pieces (e.g. `Navbar`, `NavLinks`, `AuthButtons`), but don't over-abstract: a list and its items stay in one component (render the `.map()` inline rather than a separate `...Item` file). Accept an optional `className` prop so the parent controls layout/visibility (`hidden lg:flex`).
+- Server components by default (async when fetching); put `"use client"` only on the small leaf that needs hooks (`usePathname`, session, etc.).
+- Tailwind classes written directly in JSX, plus project utility classes (e.g. `container-page`, `btn-primary`). Conditional classes via template literals: ``className={`... ${active && "bg-primary"}`}``.
+- **Class order** inside `className` (use a template literal when it spans lines):
+  1. Line 1: layout/content-box class → display (flex/grid + alignment/gap) → color (bg/text/border) → margin → padding → font
+  2. Line 2: breakpoint variants (`sm:` `md:` `lg:` …)
+  3. Line 3: state effects (`hover:` `active:` `focus:` …)
+  Omit a line if it has nothing. Example:
+  ```tsx
+  <div className={`container-page flex items-center justify-between bg-card text-foreground py-4 font-medium
+      md:py-6 lg:gap-8
+      hover:bg-muted`}>
+  ```
+- Short JSX section comments like `{/* logo + buttons */}`; few other comments.
+- Constants/helpers in a small separate file; fetch helpers as plain `async function`s with `try/catch`.
+- 4-space indentation, double quotes.
+
 ## UI / styling architecture
 
 - **shadcn/ui, `base-nova` style, built on `@base-ui/react`** (not Radix). Add components with `npx shadcn add <name>`; they land in `components/ui/`. Icons: `lucide-react`.
