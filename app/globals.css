@@ -144,6 +144,11 @@
   html {
     @apply font-sans;
   }
+  /* Tailwind v4 removed the pointer cursor from buttons, bring it back everywhere */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 /*

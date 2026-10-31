@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
+import { GoogleSignIn } from "@/lib/user";
 import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
@@ -47,7 +48,7 @@ export default function LoginForm() {
 
                 <FieldSeparator className="text-xs">or</FieldSeparator>
 
-                <Button type="button" variant="outline" size="lg" className="w-full bg-transparent border-ink/70
+                <Button onClick={GoogleSignIn} type="button" variant="outline" size="lg" className="w-full bg-transparent border-ink/70
                     dark:bg-transparent dark:border-ink/70">
                     <FaGoogle /> Continue with Google
                 </Button>

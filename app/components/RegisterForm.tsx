@@ -4,8 +4,10 @@ import Link from "next/link";
 import { Check, CircleAlert, Eye, EyeOff, ImageIcon, Lock, Mail, UserRound, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { FaGoogle } from "react-icons/fa";
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
+import { GoogleSignIn } from "@/lib/user";
 
 export default function RegisterForm() {
     const [name, setName] = useState("");
@@ -103,6 +105,13 @@ export default function RegisterForm() {
                 </Field>
 
                 <Button type="submit" size="lg" className="w-full">Create account</Button>
+
+                <FieldSeparator className="text-xs">or</FieldSeparator>
+
+                <Button onClick={GoogleSignIn} type="button" variant="outline" size="lg" className="w-full bg-transparent border-ink/70
+                    dark:bg-transparent dark:border-ink/70">
+                    <FaGoogle /> Continue with Google
+                </Button>
 
                 <p className="text-muted-foreground text-center text-sm">
                     Already have an account? <Link href="/login" className="text-link font-bold">Log in</Link>

@@ -7,7 +7,6 @@ import AuthButtons from "./AuthButtons";
 import MobileMenu from "./MobileMenu";
 import { navLinks } from "@/lib/navlinks";
 
-
 export default function Navbar() {
     return (
         <nav className="sticky top-0 z-50 bg-background border-b border-line">
