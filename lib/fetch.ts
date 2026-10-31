@@ -44,3 +44,16 @@ export const getUpcomingEvents = async (limit?: number): Promise<EventData[]> =>
         return [];
     }
 }
+
+// one event by its id, or null if it doesn't exist (the page then shows 404)
+export const getEventDetails = async (id: string): Promise<EventData | null> => {
+    try {
+        const res = await fetch(`${baseurl}/upcoming-events/${id}`);
+        if (!res.ok) throw new Error("Couldn't load the event.");
+        const text = await res.text();
+        return text ? JSON.parse(text) : null; // the server sends an empty body when nothing is found
+    }
+    catch {
+        return null;
+    }
+}
