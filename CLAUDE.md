@@ -50,7 +50,9 @@ The user is a beginner — keep code simple and readable; no clever abstractions
 ## UI / styling architecture
 
 - **shadcn/ui, `base-nova` style, built on `@base-ui/react`** (not Radix). Add components with `npx shadcn add <name>`; they land in `components/ui/`. Icons: `lucide-react`.
-- Forms use the shadcn `Input`, `Label`, `Button`, `Avatar` from `components/ui/`. Their base classes were edited to the Beacon look (`Input`: 52px / `rounded-field` / coral focus ring; `Label`: bold; `Button size="lg"`: 48px coral pill), so don't re-add those styles per form. Use `aria-invalid` on `Input` for the error state.
+- **Always use a shadcn component when one fits** (add with `npx shadcn add <name>`; answer "no" to overwrite prompts so the customized files aren't replaced). Customized to the Beacon look in `components/ui/`: `Input` and `InputGroup` (52px / `rounded-field` / coral focus ring — use `InputGroup` for inputs with icons or a show-password button), `Label` (bold), `Button size="lg"` (48px coral pill). Don't re-add those styles per form. Use `aria-invalid` on inputs for the error state.
+- Form structure: `<form>` → `FieldGroup` → `Field` (`FieldLabel` + `InputGroup` + optional `FieldError`), `FieldSeparator` for "or" dividers. `LoginForm.tsx` / `RegisterForm.tsx` are the reference examples.
+- Decorative rings are inline SVG `<circle>`s with `vectorEffect="non-scaling-stroke"` (the CSS `beacon-rings` gradient looks pixelated — don't use it).
 - `cn` comes from the `cn` npm package — `lib/utils.ts` just re-exports it. Generated components may import from `"cn"` directly.
 - **`app/globals.css` is the design system ("Beacon")**:
   - `:root` / `.dark` define raw color tokens (coral primary `#ff8559`, plus extra `--danger` / `--danger-bg` beyond shadcn's set); `@theme inline` maps them to Tailwind utilities. Dark mode is class-based (`.dark` ancestor).

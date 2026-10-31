@@ -101,6 +101,7 @@
   --success: #166534;
   --success-bg: #dcfce7;
   --footer: #1c1917;
+  --autofill: #e8f0fe;
 }
 
 .dark {
@@ -130,6 +131,7 @@
   --success: #4ade80;
   --success-bg: #14301f;
   --footer: #0e0c0a;
+  --autofill: #1e2733;
 }
 
 @layer base {
@@ -142,6 +144,22 @@
   html {
     @apply font-sans;
   }
+}
+
+/*
+  Autofill: autofilled fields get a soft tint (--autofill) that fills the whole rounded field.
+  Kept outside @layer on purpose so it beats Tailwind classes like bg-card.
+*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--autofill) inset;
+  -webkit-text-fill-color: var(--foreground);
+  caret-color: var(--foreground);
+}
+/* inputs with icons: tint the whole group, not just the inner input */
+[data-slot="input-group"]:has(input:-webkit-autofill) {
+  background-color: var(--autofill);
 }
 
 /*
