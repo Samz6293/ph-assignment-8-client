@@ -182,13 +182,14 @@ export default function CreateEventForm() {
                     </Field>
 
                     {/* buttons */}
-                    <div className="flex justify-end gap-3">
+                    <div className="flex flex-col justify-start gap-3
+                        sm:flex-row">
+                        <Button type="submit" size="lg">Publish event</Button>
                         <Button variant="outline" size="lg" nativeButton={false} render={<Link href="/" />}
                             className="bg-transparent border-ink/70
                             dark:bg-transparent dark:border-ink/70">
                             Cancel
                         </Button>
-                        <Button type="submit" size="lg">Publish event</Button>
                     </div>
                 </FieldGroup>
             </form>

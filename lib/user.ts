@@ -1,4 +1,4 @@
-import { LoginFormData, RegisterFormData } from "@/app/types";
+import { LoginFormData, ProfileFormData, RegisterFormData } from "@/app/types";
 import { toast } from "sonner";
 import { authClient } from "./auth-client";
 
@@ -42,5 +42,21 @@ export const LoginUser = async (formData: LoginFormData) => {
     }
 
     toast.success(`Welcome back, ${data.user.name}!`, { description: "You're logged in." });
+    return true;
+}
+
+// returns true if the profile was saved (the navbar avatar updates on its own)
+export const UpdateProfile = async (formData: ProfileFormData) => {
+    const { error } = await authClient.updateUser({
+        name: formData.name,
+        image: formData.photoURL || null,
+    });
+
+    if (error) {
+        toast.error("Couldn't save your changes", { description: error.message });
+        return false;
+    }
+
+    toast.success("Profile updated", { description: "Your new name and photo are saved." });
     return true;
 }

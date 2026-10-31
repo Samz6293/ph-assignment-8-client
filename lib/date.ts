@@ -21,6 +21,11 @@ export function isAfterToday(date: Date) {
     return date >= getTomorrow();
 }
 
+// "Aug 2026"
+export function formatMonthYear(date: Date) {
+    return date.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+}
+
 // "12 Oct 2026", or "Mon, 12 Oct 2026" with the weekday
 export function formatDate(date: Date, withWeekday = false) {
     return date.toLocaleDateString("en-GB", {

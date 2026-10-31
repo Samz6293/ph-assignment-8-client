@@ -6,7 +6,7 @@ export interface NavLink {
 export interface User {
     name: string
     email: string
-    image?: string
+    image?: string | null
 }
 
 export interface RegisterFormData {
@@ -19,6 +19,11 @@ export interface RegisterFormData {
 export interface LoginFormData {
     email: string
     password: string
+}
+
+export interface ProfileFormData {
+    name: string
+    photoURL: string
 }
 
 export interface EventType {
