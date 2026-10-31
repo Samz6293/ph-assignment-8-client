@@ -1,17 +1,12 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { Wifi } from "lucide-react";
-import { NavLink } from "../types";
 import NavLinks from "./NavLinks";
 import ThemeToggle from "./ThemeToggle";
 import AuthButtons from "./AuthButtons";
 import MobileMenu from "./MobileMenu";
+import { navLinks } from "@/lib/navlinks";
 
-// add a new page link here
-const navLinks: NavLink[] = [
-    { label: "Home", href: "/" },
-    { label: "Upcoming Events", href: "/upcoming-events" },
-];
 
 export default function Navbar() {
     return (

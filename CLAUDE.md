@@ -20,6 +20,7 @@ No test runner is configured.
 - Route props use the global generated types (e.g. `LayoutProps<"/">`, `PageProps<"/path">`) rather than hand-written prop types.
 - Tailwind CSS v4 is CSS-first: there is no `tailwind.config`. Tailwind is wired through a Turbopack loader rule (`@tailwindcss/turbopack`) in `next.config.ts`, not PostCSS.
 - Path alias `@/*` → repo root.
+- Routes are flat: `/upcoming-events`, `/create-event`, `/manage-events`, `/joined-events` (not the `/events/...` paths in the design README). All nav/footer links come from `lib/navlinks.ts`.
 - This is the client half of the project; the API lives in the sibling repo `../ph-assignment-8-server`.
 
 ## Code style (match the user's own style)
@@ -49,6 +50,7 @@ The user is a beginner — keep code simple and readable; no clever abstractions
 ## UI / styling architecture
 
 - **shadcn/ui, `base-nova` style, built on `@base-ui/react`** (not Radix). Add components with `npx shadcn add <name>`; they land in `components/ui/`. Icons: `lucide-react`.
+- Forms use the shadcn `Input`, `Label`, `Button`, `Avatar` from `components/ui/`. Their base classes were edited to the Beacon look (`Input`: 52px / `rounded-field` / coral focus ring; `Label`: bold; `Button size="lg"`: 48px coral pill), so don't re-add those styles per form. Use `aria-invalid` on `Input` for the error state.
 - `cn` comes from the `cn` npm package — `lib/utils.ts` just re-exports it. Generated components may import from `"cn"` directly.
 - **`app/globals.css` is the design system ("Beacon")**:
   - `:root` / `.dark` define raw color tokens (coral primary `#ff8559`, plus extra `--danger` / `--danger-bg` beyond shadcn's set); `@theme inline` maps them to Tailwind utilities. Dark mode is class-based (`.dark` ancestor).

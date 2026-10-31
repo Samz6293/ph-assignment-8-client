@@ -1,19 +1,10 @@
 import Link from "next/link";
 import { Wifi } from "lucide-react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { navLinks, yourSpaceLinks } from "@/lib/navlinks";
 
 // the footer is dark in both themes, so it uses fixed stone colors instead of theme colors
-const exploreLinks = [
-    { label: "Home", href: "/" },
-    { label: "Upcoming Events", href: "/events" },
-    { label: "Gallery", href: "/#gallery" },
-];
-
-const yourSpaceLinks = [
-    { label: "Create Event", href: "/events/create" },
-    { label: "Manage Events", href: "/events/manage" },
-    { label: "Joined Events", href: "/events/joined" },
-];
+const exploreLinks = [...navLinks, { label: "Gallery", href: "/#gallery" }];
 
 const socialLinks = [
     { label: "GitHub", href: "https://github.com/Samz6293", icon: <FaGithub /> },
