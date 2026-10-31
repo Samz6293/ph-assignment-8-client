@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/footer/Footer";
 import { Toaster } from "@/components/ui/sonner";
 
 const bricolage = Bricolage_Grotesque({

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Wifi } from "lucide-react";
-import LoginForm from "../components/LoginForm";
-import NextUpCard from "../components/NextUpCard";
+import LoginForm from "@/components/auth/LoginForm";
+import NextUpCard from "@/components/shared/NextUpCard";
 
 export const metadata: Metadata = {
     title: "Login | Beacon",

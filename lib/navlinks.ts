@@ -12,3 +12,9 @@ export const yourSpaceLinks: NavLink[] = [
     { label: "Manage Events", href: "/manage-events" },
     { label: "Joined Events", href: "/joined-events" },
 ];
+
+// profile dropdown in the navbar
+export const profileLinks: NavLink[] = [
+    { label: "Profile", href: "/profile" },
+    ...yourSpaceLinks,
+];

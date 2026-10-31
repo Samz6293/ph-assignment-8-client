@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { NavLink } from "../types";
+import { NavLink } from "@/app/types";
 
 export default function NavLinks({ className, links }: { className?: string, links: NavLink[] }) {
     const pathname = usePathname();

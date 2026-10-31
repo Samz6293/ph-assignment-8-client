@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import volunteers from "@/public/volunteers.jpg";
-import RegisterForm from "../components/RegisterForm";
-import NextUpCard from "../components/NextUpCard";
+import RegisterForm from "@/components/auth/RegisterForm";
+import NextUpCard from "@/components/shared/NextUpCard";
 
 export const metadata: Metadata = {
     title: "Register | Beacon",

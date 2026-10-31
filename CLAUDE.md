@@ -27,7 +27,7 @@ No test runner is configured.
 
 The user is a beginner — keep code simple and readable; no clever abstractions. Style is taken from their previous project (`../../ph-assignment-7`):
 
-- The user's components live in `app/components/` (shadcn primitives stay in root `components/ui/`).
+- All components live in the single root `components/` folder, grouped by where they're used: `navbar/`, `footer/`, `auth/` (login/register forms), `shared/` (used on several pages, e.g. `NextUpCard`), and `ui/` (shadcn). Add a new folder for a new area (e.g. `home/`, `events/`). Import with `@/components/<folder>/<Name>`. There is no `app/components/`.
 - One component per file, PascalCase filename, `export default function Name() {}` (not arrow functions).
 - Props typed inline: `({ className, links }: { className?: string, links: NavLink[] })`. Shared data shapes go in a `types.ts` as `interface`s.
 - Split UI into a few meaningful pieces (e.g. `Navbar`, `NavLinks`, `AuthButtons`), but don't over-abstract: a list and its items stay in one component (render the `.map()` inline rather than a separate `...Item` file). Accept an optional `className` prop so the parent controls layout/visibility (`hidden lg:flex`).
@@ -51,7 +51,7 @@ The user is a beginner — keep code simple and readable; no clever abstractions
 
 - **shadcn/ui, `base-nova` style, built on `@base-ui/react`** (not Radix). Add components with `npx shadcn add <name>`; they land in `components/ui/`. Icons: `lucide-react`.
 - **Always use a shadcn component when one fits** (add with `npx shadcn add <name>`; answer "no" to overwrite prompts so the customized files aren't replaced). Customized to the Beacon look in `components/ui/`: `Input` and `InputGroup` (52px / `rounded-field` / coral focus ring — use `InputGroup` for inputs with icons or a show-password button), `Label` (bold), `Button size="lg"` (48px coral pill). Don't re-add those styles per form. Use `aria-invalid` on inputs for the error state.
-- Form structure: `<form>` → `FieldGroup` → `Field` (`FieldLabel` + `InputGroup` + optional `FieldError`), `FieldSeparator` for "or" dividers. `LoginForm.tsx` / `RegisterForm.tsx` are the reference examples.
+- Form structure: `<form>` → `FieldGroup` → `Field` (`FieldLabel` + `InputGroup` + optional `FieldError`), `FieldSeparator` for "or" dividers. `components/auth/LoginForm.tsx` / `RegisterForm.tsx` are the reference examples.
 - Decorative rings are inline SVG `<circle>`s with `vectorEffect="non-scaling-stroke"` (the CSS `beacon-rings` gradient looks pixelated — don't use it).
 - `cn` comes from the `cn` npm package — `lib/utils.ts` just re-exports it. Generated components may import from `"cn"` directly.
 - **`app/globals.css` is the design system ("Beacon")**:

@@ -1,31 +1,56 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Check, CircleAlert, Eye, EyeOff, ImageIcon, Lock, Mail, UserRound, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaGoogle } from "react-icons/fa";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
-import { GoogleSignIn } from "@/lib/user";
+import { GoogleSignIn, RegisterUser } from "@/lib/user";
 
 export default function RegisterForm() {
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [photoURL, setPhotoURL] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const router = useRouter();
 
-    // password rules from the assignment
+    // password rules 
     const rules = [
         { label: "6+ characters", passed: password.length >= 6, error: "Password needs at least 6 characters." },
         { label: "A lowercase letter", passed: /[a-z]/.test(password), error: "Password needs at least one lowercase letter." },
         { label: "An uppercase letter", passed: /[A-Z]/.test(password), error: "Password needs at least one uppercase letter." },
     ];
     const failedRule = rules.find((rule) => !rule.passed);
-    const showError = password !== "" && failedRule;
+
+    // error messages
+    const nameError = name.trim().length < 3 ? "Name needs at least 3 characters." : "";
+    const emailError = /^\S+@\S+\.\S+$/.test(email) ? "" : "Please enter a valid email.";
+    const passwordError = failedRule ? failedRule.error : "";
+
+    // errors stay hidden until the user types in that field or presses submit
+    const showNameError = (name !== "" || submitted) && nameError;
+    const showEmailError = (email !== "" || submitted) && emailError;
+    const showError = (password !== "" || submitted) && passwordError;
+
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setSubmitted(true);
+
+        // stop here if anything is invalid, the errors show under the inputs
+        if (nameError || emailError || passwordError) return;
+
+        const formData = { name, email, photoURL, password };
+        const success = await RegisterUser(formData);
+        if (success) router.push("/");
+    }
 
     return (
-        <form className="mt-8">
+        <form onSubmit={handleRegister} noValidate className="mt-8">
             <FieldGroup>
                 {/* full name */}
                 <Field>
@@ -35,8 +60,14 @@ export default function RegisterForm() {
                             <UserRound />
                         </InputGroupAddon>
                         <InputGroupInput id="name" name="name" type="text" placeholder="Rafiq Hasan"
-                            value={name} onChange={(e) => setName(e.target.value)} />
+                            aria-invalid={!!showNameError} value={name} onChange={(e) => setName(e.target.value)} />
                     </InputGroup>
+
+                    {showNameError &&
+                        <FieldError className="flex items-center gap-1.5 font-medium">
+                            <CircleAlert className="size-4" /> {nameError}
+                        </FieldError>
+                    }
                 </Field>
 
                 {/* email */}
@@ -46,8 +77,15 @@ export default function RegisterForm() {
                         <InputGroupAddon>
                             <Mail />
                         </InputGroupAddon>
-                        <InputGroupInput id="email" name="email" type="email" placeholder="rafiq@example.com" />
+                        <InputGroupInput id="email" name="email" type="email" placeholder="rafiq@example.com"
+                            aria-invalid={!!showEmailError} value={email} onChange={(e) => setEmail(e.target.value)} />
                     </InputGroup>
+
+                    {showEmailError &&
+                        <FieldError className="flex items-center gap-1.5 font-medium">
+                            <CircleAlert className="size-4" /> {emailError}
+                        </FieldError>
+                    }
                 </Field>
 
                 {/* photo url + avatar preview: image > first letter > icon */}
@@ -89,7 +127,7 @@ export default function RegisterForm() {
 
                     {showError &&
                         <FieldError className="flex items-center gap-1.5 font-medium">
-                            <CircleAlert className="size-4" /> {failedRule.error}
+                            <CircleAlert className="size-4" /> {passwordError}
                         </FieldError>
                     }
 
@@ -97,7 +135,7 @@ export default function RegisterForm() {
                     <ul className="flex flex-col gap-1 text-xs font-semibold">
                         {rules.map((rule) =>
                             <li key={rule.label} className={`flex items-center gap-1.5
-                                ${rule.passed ? "text-success" : password ? "text-danger" : "text-muted-foreground"}`}>
+                                ${rule.passed ? "text-success" : password || submitted ? "text-danger" : "text-muted-foreground"}`}>
                                 {rule.passed ? <Check className="size-3.5" /> : <X className="size-3.5" />} {rule.label}
                             </li>
                         )}
