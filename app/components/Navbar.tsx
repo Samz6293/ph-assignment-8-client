@@ -10,7 +10,7 @@ import MobileMenu from "./MobileMenu";
 // add a new page link here
 const navLinks: NavLink[] = [
     { label: "Home", href: "/" },
-    { label: "Upcoming Events", href: "/events" },
+    { label: "Upcoming Events", href: "/upcoming-events" },
 ];
 
 export default function Navbar() {
@@ -20,11 +20,11 @@ export default function Navbar() {
 
                 {/* logo + links */}
                 <div className="flex items-center gap-8 h-full">
-                    <Link href="/" className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2 text-ink">
                         <span className="flex items-center justify-center size-9 bg-primary text-on-primary rounded-xl">
                             <Wifi className="size-5" strokeWidth={2.5} />
                         </span>
-                        <span className="text-ink font-heading text-2xl font-extrabold">Beacon</span>
+                        <span className="font-heading text-2xl font-extrabold">Beacon</span>
                     </Link>
 
                     {/* NavLinks reads the current URL, so Next.js needs a Suspense around it */}

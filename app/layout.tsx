@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -29,9 +30,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${bricolage.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider attribute="class" defaultTheme="light">
+        <ThemeProvider attribute="class" defaultTheme="system">
           <Navbar />
-          {children}
+          <main className="flex-1">{children}</main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
