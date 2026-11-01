@@ -9,11 +9,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { profileLinks } from "@/lib/navlinks";
+import { useRouter } from "next/navigation";
 
 export default function AuthButtons({ className }: { className?: string }) {
     // reads the logged-in user from the browser cookie, updates on login/logout
     const { data: session, isPending } = authClient.useSession();
     const user = session?.user;
+    const router = useRouter();
 
     // show a welcome toast once, right after a login
     useEffect(() => {
@@ -61,7 +63,10 @@ export default function AuthButtons({ className }: { className?: string }) {
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <Button variant="outline" size="lg" onClick={() => authClient.signOut()}
+                    <Button variant="outline" size="lg" onClick={() => {
+                        authClient.signOut();
+                        router.push("/");
+                        }}
                         className="hover:bg-danger-bg hover:text-danger hover:border-danger
                         dark:hover:bg-danger-bg dark:hover:border-danger">
                         <LogOut /> Logout

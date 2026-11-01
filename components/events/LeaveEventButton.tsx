@@ -5,7 +5,6 @@ import { leaveEvent } from "@/lib/fetch";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
-// asks "are you sure?" before leaving. Used on the event details page and in Joined Events
 export default function LeaveEventButton({ eventId, userId, title, className }: { eventId: string, userId: string, title: string, className?: string }) {
     const router = useRouter();
 

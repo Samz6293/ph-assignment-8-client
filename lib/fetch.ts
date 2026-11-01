@@ -113,7 +113,6 @@ export const updateEvent = async (id: string, updatedEvent: UpdateEvent) => {
     }
 }
 
-// adds the user to the event's joinedPeople. Returns true if they joined
 export const joinEvent = async (eventId: string, person: Omit<JoinedPerson, "joinedAt">) => {
     try {
         const res = await fetch(`${baseurl}/events/${eventId}/join`, {
@@ -140,7 +139,6 @@ export const joinEvent = async (eventId: string, person: Omit<JoinedPerson, "joi
     }
 }
 
-// every event the user joined, soonest first
 export const getJoinedEvents = async (userId: string): Promise<EventData[]> => {
     try {
         const res = await fetch(`${baseurl}/joined-events/${userId}`);
@@ -152,7 +150,6 @@ export const getJoinedEvents = async (userId: string): Promise<EventData[]> => {
     }
 }
 
-// removes the user from the event's joinedPeople. Returns true if they left
 export const leaveEvent = async (eventId: string, userId: string) => {
     try {
         const res = await fetch(`${baseurl}/events/${eventId}/leave`, {
