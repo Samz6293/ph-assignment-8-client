@@ -17,7 +17,7 @@ export const handleHostEvent = async (hostEventDetails: HostEventDeatails) => {
         if (!res.ok || !data.insertedId) throw new Error("The server did not save the event.");
 
         toast.success("Event published", {
-            description: `ID: ${data.insertedId} · Hosted by ${hostEventDetails.hostName}`,
+            description: `Hosted by ${hostEventDetails.hostName} · ID: ${data.insertedId}`,
         });
         return true;
     }
@@ -27,8 +27,8 @@ export const handleHostEvent = async (hostEventDetails: HostEventDeatails) => {
     }
 }
 
-export const getAllEvents = async() => {
-    const res = await fetch(`${baseurl}/events`);
+export const getPastEvents = async() => {
+    const res = await fetch(`${baseurl}/events/previous`);
     const data = await res.json();
     return data;
 }
@@ -45,15 +45,40 @@ export const getUpcomingEvents = async (limit?: number): Promise<EventData[]> =>
     }
 }
 
-// one event by its id, or null if it doesn't exist (the page then shows 404)
 export const getEventDetails = async (id: string): Promise<EventData | null> => {
     try {
-        const res = await fetch(`${baseurl}/upcoming-events/${id}`);
+        const res = await fetch(`${baseurl}/event-details/${id}`);
         if (!res.ok) throw new Error("Couldn't load the event.");
         const text = await res.text();
         return text ? JSON.parse(text) : null; // the server sends an empty body when nothing is found
     }
     catch {
         return null;
+    }
+}
+
+export const getEventByHost = async (id: string): Promise<EventData[]> => {
+    try {
+        const res = await fetch(`${baseurl}/manage-events/${id}`);
+        if (!res.ok) throw new Error("Couldn't load your events.");
+        return await res.json();
+    }
+    catch {
+        return [];
+    }
+}
+
+export const deleteEvent = async (id: string) => {
+    try {
+        const res = await fetch(`${baseurl}/events/${id}`, { method: "DELETE" });
+        const data = await res.json();
+        if (!res.ok || data.deletedCount !== 1) throw new Error("The server did not delete the event.");
+
+        toast.success("Event deleted");
+        return true;
+    }
+    catch {
+        toast.error("Couldn't delete the event", { description: "Check your connection and try again." });
+        return false;
     }
 }

@@ -20,6 +20,8 @@ export default function CreateEventForm() {
     const { data: session } = authClient.useSession();
     const hostEmail = session?.user.email || "";
     const hostName = session?.user.name || "";
+    const hostID = session?.user.id || "";
+    const hostImage = session?.user.image || "";
 
     const [title, setTitle] = useState("");
     const [type, setType] = useState("");
@@ -54,7 +56,7 @@ export default function CreateEventForm() {
         // stop here if anything is invalid, the errors show under the inputs
         if (titleError || typeError || dateError || locationError || thumbnailError || descriptionError) return;
 
-        const hostEventDetails = { title, type, date: date!.toISOString(), location, thumbnail, description, hostEmail, hostName };
+        const hostEventDetails = { title, type, date: date!.toISOString(), location, thumbnail, description, hostEmail, hostName, hostID, hostImage };
         const success = await handleHostEvent(hostEventDetails);
 
         // assignment: after creating, go to the Upcoming Events page

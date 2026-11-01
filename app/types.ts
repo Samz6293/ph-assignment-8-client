@@ -51,6 +51,8 @@ export interface HostEventDeatails {
     description:string 
     hostEmail:string
     hostName: string
+    hostID: string
+    hostImage: string
 }
 
 export interface EventData extends HostEventDeatails {

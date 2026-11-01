@@ -49,3 +49,8 @@ export function formatDate(date: Date, withWeekday = false) {
         year: "numeric",
     });
 }
+
+// "14 Nov"
+export function formatDayMonth(date: Date) {
+    return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
