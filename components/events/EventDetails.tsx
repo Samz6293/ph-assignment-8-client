@@ -8,7 +8,7 @@ import { formatLongDate, getDateParts } from "@/lib/date";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // reads the id from the URL and fetches the event, so the page wraps it in <Suspense>
 export default async function EventDetails({ params }: { params: Promise<{ id: string }> }) {
@@ -102,6 +102,7 @@ export default async function EventDetails({ params }: { params: Promise<{ id: s
                         {/* host */}
                         <div className="flex items-center gap-3 bg-muted p-3 rounded-card">
                             <Avatar className="size-10 after:border-2 after:border-primary">
+                                <AvatarImage src={event.hostImage || undefined} alt={event.hostName} />
                                 <AvatarFallback className="bg-soft text-link text-sm font-bold">{hostInitials}</AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">

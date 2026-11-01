@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Pencil } from "lucide-react";
 import { EventData } from "@/app/types";
 import { eventTypes } from "@/lib/eventTypes";
 import { formatDate } from "@/lib/date";
-import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import DeleteEventButton from "./DeleteEventButton";
+import UpdateEventButton from "./UpdateEventButton";
 
 export default function HostedEventsTable({ events, isPast }: { events: EventData[], isPast?: boolean }) {
     const columns = ["Event", "Date", "Location", "Joined", "Actions"];
@@ -61,12 +60,7 @@ export default function HostedEventsTable({ events, isPast }: { events: EventDat
                                 {/* actions: past events only get Delete */}
                                 <TableCell className="px-6">
                                     <div className="flex items-center justify-end gap-2">
-                                        {!isPast &&
-                                            // TODO: open the update form once it is built
-                                            <Button type="button" variant="outline" size="sm" className="rounded-full px-3">
-                                                <Pencil /> Update
-                                            </Button>
-                                        }
+                                        {!isPast && <UpdateEventButton event={event} />}
                                         <DeleteEventButton id={event._id} title={event.title} />
                                     </div>
                                 </TableCell>

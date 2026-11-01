@@ -58,3 +58,12 @@ export interface HostEventDeatails {
 export interface EventData extends HostEventDeatails {
     _id: string
 }
+
+export interface UpdateEvent {
+    title: string
+    type: string
+    date: string
+    location: string
+    thumbnail: string
+    description: string
+}

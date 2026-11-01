@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { EventData, HostEventDeatails } from "@/app/types";
+import { EventData, HostEventDeatails, UpdateEvent } from "@/app/types";
 
 const baseurl = "http://localhost:8080";
 
@@ -74,11 +74,41 @@ export const deleteEvent = async (id: string) => {
         const data = await res.json();
         if (!res.ok || data.deletedCount !== 1) throw new Error("The server did not delete the event.");
 
-        toast.success("Event deleted");
+        toast.success("Event deleted", { description: "It is no longer on the board." });
         return true;
     }
     catch {
         toast.error("Couldn't delete the event", { description: "Check your connection and try again." });
+        return false;
+    }
+}
+
+export const updateEvent = async (id: string, updatedEvent: UpdateEvent) => {
+    try {
+        const res = await fetch(`${baseurl}/events/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedEvent)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error("The server did not update the event.");
+
+        if (data.matchedCount === 0) {
+            toast.error("Couldn't find this event", { description: "It may have been deleted. Reload the page and try again." });
+            return false;
+        }
+        if (data.modifiedCount === 0) {
+            toast.info("No changes to save", { description: "The event already has these details." });
+            return true;
+        }
+
+        toast.success("Event updated", { description: `${updatedEvent.title} now shows the new details.` });
+        return true;
+    }
+    catch {
+        toast.error("Couldn't update the event", { description: "Check your connection and try again." });
         return false;
     }
 }
