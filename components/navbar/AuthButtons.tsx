@@ -11,8 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { profileLinks } from "@/lib/navlinks";
 import { useRouter } from "next/navigation";
 
-export default function AuthButtons({ className }: { className?: string }) {
-    // reads the logged-in user from the browser cookie, updates on login/logout
+export default function AuthButtons({ className, onAction }: { className?: string, onAction?: () => void }) {
     const { data: session, isPending } = authClient.useSession();
     const user = session?.user;
     const router = useRouter();
@@ -24,6 +23,12 @@ export default function AuthButtons({ className }: { className?: string }) {
             sessionStorage.removeItem("justLoggedIn");
         }
     }, [user]);
+
+    const handleLogout = async () => {
+        await authClient.signOut();
+        onAction?.(); // close the mobile menu (does nothing on desktop)
+        router.push("/"); 
+    }
 
     // keep the space empty while checking, so Login doesn't flash for logged-in users
     if (isPending) return <div className={className} />;
@@ -56,17 +61,14 @@ export default function AuthButtons({ className }: { className?: string }) {
                             <DropdownMenuSeparator />
 
                             {profileLinks.map((link) =>
-                                <DropdownMenuItem key={link.href} render={<Link href={link.href} />} className="py-2 cursor-pointer">
+                                <DropdownMenuItem key={link.href} render={<Link href={link.href} />} onClick={onAction} className="py-2 cursor-pointer">
                                     {link.label}
                                 </DropdownMenuItem>
                             )}
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <Button variant="outline" size="lg" onClick={() => {
-                        authClient.signOut();
-                        router.push("/");
-                        }}
+                    <Button variant="outline" size="lg" onClick={handleLogout}
                         className="hover:bg-danger-bg hover:text-danger hover:border-danger
                         dark:hover:bg-danger-bg dark:hover:border-danger">
                         <LogOut /> Logout

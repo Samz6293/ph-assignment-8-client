@@ -25,7 +25,7 @@ export default function MobileMenu({ links }: { links: NavLink[] }) {
                     <div onClick={() => setIsOpen(false)}>
                         <NavLinks className="flex flex-col gap-4" links={links} />
                     </div>
-                    <AuthButtons className="flex items-center gap-3" />
+                    <AuthButtons className="flex items-center gap-3" onAction={() => setIsOpen(false)} />
                 </div>
             }
         </div>
