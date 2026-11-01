@@ -1,14 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { CalendarDays, ImageIcon, Lock, MapPin, Users } from "lucide-react";
+import { auth } from "@/lib/auth";
 import { getEventDetails } from "@/lib/fetch";
 import { eventTypes } from "@/lib/eventTypes";
-import { formatLongDate, getDateParts } from "@/lib/date";
-import { Button } from "@/components/ui/button";
+import { formatLongDate, getDateParts, getToday } from "@/lib/date";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "@/components/ui/avatar";
+import JoinEventButton from "./JoinEventButton";
 
 // reads the id from the URL and fetches the event, so the page wraps it in <Suspense>
 export default async function EventDetails({ params }: { params: Promise<{ id: string }> }) {
@@ -23,13 +25,24 @@ export default async function EventDetails({ params }: { params: Promise<{ id: s
     const { month, day, weekday } = getDateParts(date);
     const hostInitials = event.hostName.split(" ").map((word) => word[0]).join("").slice(0, 2).toUpperCase();
 
+    const session = await auth.api.getSession({ headers: await headers() });
+    const user = session?.user;
+
+    const joinedPeople = event.joinedPeople || [];
+
+    // which join button to show
+    let status: "host" | "loggedOut" | "joined" | "ended" | "canJoin" = "canJoin";
+    if (date < getToday()) status = "ended";
+    else if (!user) status = "loggedOut";
+    else if (user.id === event.hostID) status = "host";
+    else if (joinedPeople.some((person) => person.userId === user.id)) status = "joined";
+
     return (
         <div className="flex flex-col gap-10">
             {/* big thumbnail + type chip */}
             <div className={`relative flex flex-col items-center justify-center gap-2 h-64 ${eventType?.tint || "bg-muted"} text-ink rounded-hero overflow-hidden text-sm
                 md:h-96`}>
                 {event.thumbnail ?
-                    // unoptimized: hosts can paste an image from any website
                     <Image src={event.thumbnail} alt={event.title} fill unoptimized priority className="object-cover" />
                     :
                     <>
@@ -82,22 +95,41 @@ export default async function EventDetails({ params }: { params: Promise<{ id: s
 
                         <Separator />
 
-                        {/* TODO: show who joined once joining is built */}
-                        <p className="flex items-center gap-2 text-muted-foreground text-sm">
-                            <Users className="size-4" /> Be the first to join this event
-                        </p>
+                        {/* who joined: first 3 avatars + count */}
+                        {joinedPeople.length > 0 ?
+                            <div className="flex items-center gap-3">
+                                <AvatarGroup>
+                                    {joinedPeople.slice(0, 3).map((person) =>
+                                        <Avatar key={person.userId}>
+                                            <AvatarImage src={person.image || undefined} alt={person.name} />
+                                            <AvatarFallback className="bg-soft text-link text-xs font-bold">{person.name[0]}</AvatarFallback>
+                                        </Avatar>
+                                    )}
+                                </AvatarGroup>
+                                <p className="text-muted-foreground text-sm">
+                                    <span className="text-foreground font-bold">{joinedPeople.length} {joinedPeople.length === 1 ? "person" : "people"}</span> joined
+                                </p>
+                            </div>
+                            :
+                            <p className="flex items-center gap-2 text-muted-foreground text-sm">
+                                <Users className="size-4" /> Be the first to join this event
+                            </p>
+                        }
 
                         <Separator />
 
-                        {/* TODO: make this work (logged-out users go to login first) */}
-                        <Button type="button" size="lg" className="w-full">Join Event</Button>
+                        <JoinEventButton eventId={event._id} eventTitle={event.title} status={status}
+                            user={user ? { userId: user.id, name: user.name, email: user.email, image: user.image || "" } : undefined} />
 
-                        <p className="flex gap-2 text-muted-foreground text-xs leading-relaxed">
-                            <Lock className="size-3.5 shrink-0 mt-0.5" />
-                            <span>
-                                Anyone can read this page. You will be asked to <Link href="/login" className="text-link underline">log in</Link> before joining.
-                            </span>
-                        </p>
+                        {/* only logged-out visitors need this note */}
+                        {status === "loggedOut" &&
+                            <p className="flex gap-2 text-muted-foreground text-xs leading-relaxed">
+                                <Lock className="size-3.5 shrink-0 mt-0.5" />
+                                <span>
+                                    Anyone can read this page. You will be asked to <Link href="/login" className="text-link underline">log in</Link> before joining.
+                                </span>
+                            </p>
+                        }
 
                         {/* host */}
                         <div className="flex items-center gap-3 bg-muted p-3 rounded-card">

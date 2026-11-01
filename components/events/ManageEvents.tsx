@@ -30,11 +30,13 @@ export default async function ManageEvents() {
     const pastEvents = events.filter((event) => new Date(event.date) < today).reverse(); // most recent first
     const nextEvent = upcomingEvents[0];
 
-    // TODO: replace "People joined" with the real count once joining is built
+    // everyone who joined any of this host's events
+    const totalJoined = events.reduce((total, event) => total + (event.joinedPeople?.length || 0), 0);
+
     const stats = [
         { label: "Events you host", value: events.length },
         { label: "Next event", value: nextEvent ? formatDayMonth(new Date(nextEvent.date)) : "None yet" },
-        { label: "People joined", value: 0 },
+        { label: "People joined", value: totalJoined },
     ];
 
     return (

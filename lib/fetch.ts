@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import { EventData, HostEventDeatails, UpdateEvent } from "@/app/types";
+import { EventData, HostEventDeatails, JoinedPerson, UpdateEvent } from "@/app/types";
 
-const baseurl = "http://localhost:8080";
+const baseurl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const handleHostEvent = async (hostEventDetails: HostEventDeatails) => {
     try {
@@ -109,6 +109,72 @@ export const updateEvent = async (id: string, updatedEvent: UpdateEvent) => {
     }
     catch {
         toast.error("Couldn't update the event", { description: "Check your connection and try again." });
+        return false;
+    }
+}
+
+// adds the user to the event's joinedPeople. Returns true if they joined
+export const joinEvent = async (eventId: string, person: Omit<JoinedPerson, "joinedAt">) => {
+    try {
+        const res = await fetch(`${baseurl}/events/${eventId}/join`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(person)
+        });
+        const data = await res.json();
+
+        // the server explains why in data.message (already joined, host, past event, ...)
+        if (!res.ok) {
+            toast.error("Couldn't join this event", { description: data.message || "Please try again." });
+            return false;
+        }
+
+        toast.success("You're going!", { description: "Find it any time in Joined Events." });
+        return true;
+    }
+    catch {
+        toast.error("Couldn't join this event", { description: "Check your connection and try again." });
+        return false;
+    }
+}
+
+// every event the user joined, soonest first
+export const getJoinedEvents = async (userId: string): Promise<EventData[]> => {
+    try {
+        const res = await fetch(`${baseurl}/joined-events/${userId}`);
+        if (!res.ok) throw new Error("Couldn't load your joined events.");
+        return await res.json();
+    }
+    catch {
+        return [];
+    }
+}
+
+// removes the user from the event's joinedPeople. Returns true if they left
+export const leaveEvent = async (eventId: string, userId: string) => {
+    try {
+        const res = await fetch(`${baseurl}/events/${eventId}/leave`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId })
+        });
+        const data = await res.json();
+
+        // the server explains why in data.message (not joined, event over, ...)
+        if (!res.ok) {
+            toast.error("Couldn't leave this event", { description: data.message || "Please try again." });
+            return false;
+        }
+
+        toast.success("You left the event", { description: "It is no longer in your Joined Events." });
+        return true;
+    }
+    catch {
+        toast.error("Couldn't leave this event", { description: "Check your connection and try again." });
         return false;
     }
 }

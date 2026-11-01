@@ -54,8 +54,7 @@ export default function HostedEventsTable({ events, isPast }: { events: EventDat
 
                                 <TableCell className={`px-6 ${isPast && "text-muted-foreground"}`}>{formatDate(new Date(event.date), true)}</TableCell>
                                 <TableCell className="px-6">{event.location}</TableCell>
-                                {/* TODO: show the real count once joining is built */}
-                                <TableCell className="px-6">0</TableCell>
+                                <TableCell className="px-6">{event.joinedPeople?.length || 0}</TableCell>
 
                                 {/* actions: past events only get Delete */}
                                 <TableCell className="px-6">

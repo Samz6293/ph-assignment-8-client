@@ -55,8 +55,18 @@ export interface HostEventDeatails {
     hostImage: string
 }
 
+// one person in an event's joinedPeople array
+export interface JoinedPerson {
+    userId: string
+    name: string
+    email: string
+    image: string
+    joinedAt: string
+}
+
 export interface EventData extends HostEventDeatails {
     _id: string
+    joinedPeople?: JoinedPerson[] // missing on events nobody has joined yet
 }
 
 export interface UpdateEvent {

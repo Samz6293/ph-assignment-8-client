@@ -1,0 +1,54 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
+import { leaveEvent } from "@/lib/fetch";
+import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+
+// asks "are you sure?" before leaving. Used on the event details page and in Joined Events
+export default function LeaveEventButton({ eventId, userId, title, className }: { eventId: string, userId: string, title: string, className?: string }) {
+    const router = useRouter();
+
+    const handleLeave = async () => {
+        const success = await leaveEvent(eventId, userId);
+        // load the page again so the count, button and lists update
+        if (success) router.refresh();
+    }
+
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger render={
+                <Button type="button" variant="outline" size="lg" className={`bg-transparent border-line text-muted-foreground
+                    dark:bg-transparent
+                    hover:bg-danger-bg hover:text-danger hover:border-danger dark:hover:bg-danger-bg ${className}`} />
+            }>
+                <LogOut /> Leave event
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogMedia className="bg-danger-bg text-danger">
+                        <LogOut />
+                    </AlertDialogMedia>
+                    <AlertDialogTitle>Leave this event?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        You will be removed from {title}. You can join again any time before it starts.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                {/* stay + leave buttons */}
+                <AlertDialogFooter>
+                    <AlertDialogCancel size="lg" className="bg-transparent border-foreground/70
+                        dark:bg-transparent dark:border-foreground/70">
+                        Stay
+                    </AlertDialogCancel>
+                    <AlertDialogAction size="lg" onClick={handleLeave} className="bg-danger text-white
+                        dark:text-stone-950
+                        hover:bg-danger/90">
+                        Leave
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    )
+}
