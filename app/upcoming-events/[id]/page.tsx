@@ -7,8 +7,6 @@ export const metadata: Metadata = {
     title: "Event details | Beacon",
 };
 
-// the page itself doesn't read the id, so Next.js can pre-build this shell.
-// the parts that read the id and fetch data sit inside <Suspense> and load per visit.
 export default function EventDetailsPage({ params }: PageProps<"/upcoming-events/[id]">) {
     return (
         <>
