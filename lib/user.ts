@@ -45,7 +45,6 @@ export const LoginUser = async (formData: LoginFormData) => {
     return true;
 }
 
-// returns true if the profile was saved (the navbar avatar updates on its own)
 export const UpdateProfile = async (formData: ProfileFormData) => {
     const { error } = await authClient.updateUser({
         name: formData.name,

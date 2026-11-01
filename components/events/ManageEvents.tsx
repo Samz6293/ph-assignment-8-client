@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { headers } from "next/headers";
 import { ArrowRight, CalendarDays, History, Plus } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { getLoggedInUser } from "@/lib/session";
 import { getEventByHost } from "@/lib/fetch";
 import { formatDayMonth, getToday } from "@/lib/date";
 import { Button } from "@/components/ui/button";
@@ -9,21 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import HostedEventsTable from "./HostedEventsTable";
 
 export default async function ManageEvents() {
-    const session = await auth.api.getSession({ headers: await headers() });
-
-    // TODO: remove once private routes redirect to login
-    if (!session) {
-        return (
-            <Card className="max-w-md mx-auto text-center">
-                <CardContent className="flex flex-col items-center gap-4">
-                    <p className="text-muted-foreground">Log in to see the events you host.</p>
-                    <Button size="lg" nativeButton={false} render={<Link href="/login" />}>Login</Button>
-                </CardContent>
-            </Card>
-        );
-    }
-
-    const events = await getEventByHost(session.user.id);
+    const user = await getLoggedInUser();
+    const events = await getEventByHost(user.id);
     const today = getToday();
 
     const upcomingEvents = events.filter((event) => new Date(event.date) >= today);

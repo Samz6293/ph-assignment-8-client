@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import ProfileDetails from "@/components/profile/ProfileDetails";
 
 export const metadata: Metadata = {
@@ -23,7 +24,15 @@ export default function ProfilePage() {
             <section className="bg-surface py-12
                 md:py-16">
                 <div className="container-page max-w-5xl">
-                    <ProfileDetails />
+                    <Suspense fallback={
+                        <div className="grid grid-cols-1 gap-6
+                            md:grid-cols-[300px_minmax(0,1fr)]">
+                            <div className="skeleton h-96" />
+                            <div className="skeleton h-80" />
+                        </div>
+                    }>
+                        <ProfileDetails />
+                    </Suspense>
                 </div>
             </section>
         </>

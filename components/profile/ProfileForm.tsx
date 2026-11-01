@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { CircleAlert, ImageIcon, UserRound } from "lucide-react";
 import { User } from "@/app/types";
 import { UpdateProfile } from "@/lib/user";
@@ -9,6 +10,8 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 
 export default function ProfileForm({ user }: { user: User }) {
+    const router = useRouter();
+
     // start with the user's current name and photo
     const [name, setName] = useState(user.name);
     const [photoURL, setPhotoURL] = useState(user.image || "");
@@ -29,7 +32,8 @@ export default function ProfileForm({ user }: { user: User }) {
         // stop here if anything is invalid, the errors show under the inputs
         if (nameError || photoError) return;
 
-        await UpdateProfile({ name: name.trim(), photoURL });
+        const success = await UpdateProfile({ name: name.trim(), photoURL });
+        if (success) router.refresh();
     }
 
     return (

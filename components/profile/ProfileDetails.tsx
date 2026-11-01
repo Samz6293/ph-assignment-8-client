@@ -1,38 +1,22 @@
-"use client";
-import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
+import { getLoggedInUser } from "@/lib/session";
+import { getEventByHost, getJoinedEvents } from "@/lib/fetch";
 import { formatMonthYear } from "@/lib/date";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ProfileForm from "./ProfileForm";
 
-export default function ProfileDetails() {
-    const { data: session, isPending } = authClient.useSession();
-    const user = session?.user;
+export default async function ProfileDetails() {
 
-    // loading
-    if (isPending) return <div className="skeleton h-80" />;
-
-    // TODO: remove once private routes redirect to login
-    if (!user) {
-        return (
-            <Card className="max-w-md mx-auto text-center">
-                <CardContent className="flex flex-col items-center gap-4">
-                    <p className="text-muted-foreground">Log in to see and edit your profile.</p>
-                    <Button size="lg" nativeButton={false} render={<Link href="/login" />}>Login</Button>
-                </CardContent>
-            </Card>
-        );
-    }
+    const user = await getLoggedInUser();
+    const joinedEvents = await getJoinedEvents(user.id);
+    const hostedEvents = await getEventByHost(user.id);
 
     const initials = user.name.split(" ").map((word) => word[0]).join("").slice(0, 2).toUpperCase();
 
-    // TODO: replace with real counts once events come from the database
     const stats = [
-        { label: "Events joined", value: "0" },
-        { label: "Events hosted", value: "0" },
+        { label: "Events joined", value: joinedEvents.length },
+        { label: "Events hosted", value: hostedEvents.length },
         { label: "Member since", value: formatMonthYear(new Date(user.createdAt)) },
     ];
 
@@ -40,7 +24,6 @@ export default function ProfileDetails() {
         <div className="grid grid-cols-1 items-start gap-6
             md:grid-cols-[300px_minmax(0,1fr)]">
 
-            {/* summary card: shows what is saved, updates after "Save changes" */}
             <Card>
                 <CardContent className="flex flex-col items-center gap-1 text-center">
                     <Avatar className="size-24 mb-3 after:border-[3px] after:border-primary">

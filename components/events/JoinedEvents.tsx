@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { headers } from "next/headers";
 import { ArrowRight, CalendarCheck, MapPin } from "lucide-react";
-import { auth } from "@/lib/auth";
+import { getLoggedInUser } from "@/lib/session";
 import { getJoinedEvents } from "@/lib/fetch";
 import { eventTypes } from "@/lib/eventTypes";
 import { getDateParts, getToday } from "@/lib/date";
@@ -10,12 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import LeaveEventButton from "./LeaveEventButton";
 
-// reads the logged-in user and fetches their joined events, so the page wraps it in <Suspense>
 export default async function JoinedEvents() {
-    const session = await auth.api.getSession({ headers: await headers() });
-
-    const userId = session?.user.id as string;
-    const events = await getJoinedEvents(userId);
+    const user = await getLoggedInUser();
+    const events = await getJoinedEvents(user.id);
     const today = getToday();
 
     // nothing joined yet
@@ -82,7 +78,7 @@ export default async function JoinedEvents() {
                                 <Button size="lg" nativeButton={false} render={<Link href={`/upcoming-events/${event._id}`} />}>
                                     View Event <ArrowRight />
                                 </Button>
-                                {!isPast && <LeaveEventButton eventId={event._id} userId={userId} title={event.title} />}
+                                {!isPast && <LeaveEventButton eventId={event._id} userId={user.id} title={event.title} />}
                             </div>
                         </CardContent>
                     </Card>

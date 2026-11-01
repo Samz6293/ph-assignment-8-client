@@ -9,7 +9,7 @@ export async function proxy(request: NextRequest) {
     })
     const user = session?.user;
     if(!user) {
-        return NextResponse.redirect(new URL('/register', request.url))
+        return NextResponse.redirect(new URL('/login', request.url))
     }
 }
 
