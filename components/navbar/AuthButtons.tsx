@@ -75,7 +75,7 @@ export default function AuthButtons({ className, onAction }: { className?: strin
                     </Button>
                 </>
                 :
-                <Link href="/login" className="btn btn-primary">Login</Link>
+                <Link href="/login" onClick={onAction} className="btn btn-primary">Login</Link>
             }
         </div>
     )
