@@ -59,3 +59,15 @@ export const UpdateProfile = async (formData: ProfileFormData) => {
     toast.success("Profile updated", { description: "Your new name and photo are saved." });
     return true;
 }
+
+export const LogoutUser = async () => {
+    const { error } = await authClient.signOut();
+
+    if (error) {
+        toast.error("Couldn't log you out", { description: error.message });
+        return false;
+    }
+
+    toast.success("Logged out", { description: "See you at the next event." });
+    return true;
+}

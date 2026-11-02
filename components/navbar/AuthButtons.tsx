@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { profileLinks } from "@/lib/navlinks";
+import { LogoutUser } from "@/lib/user";
 import { useRouter } from "next/navigation";
 
 export default function AuthButtons({ className, onAction }: { className?: string, onAction?: () => void }) {
@@ -25,9 +26,10 @@ export default function AuthButtons({ className, onAction }: { className?: strin
     }, [user]);
 
     const handleLogout = async () => {
-        await authClient.signOut();
+        const success = await LogoutUser();
+        if (!success) return;
         onAction?.(); // close the mobile menu (does nothing on desktop)
-        router.push("/"); 
+        router.push("/"); // leave private pages after logging out
     }
 
     // keep the space empty while checking, so Login doesn't flash for logged-in users
