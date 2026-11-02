@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarCheck, MapPin } from "lucide-react";
-import { getLoggedInUser } from "@/lib/session";
+import { getLoggedInUser, getServerToken } from "@/lib/session";
 import { getJoinedEvents } from "@/lib/fetch";
 import { eventTypes } from "@/lib/eventTypes";
 import { getDateParts, getToday } from "@/lib/date";
@@ -11,7 +11,8 @@ import LeaveEventButton from "./LeaveEventButton";
 
 export default async function JoinedEvents() {
     const user = await getLoggedInUser();
-    const events = await getJoinedEvents(user.id);
+    const token = await getServerToken();
+    const events = await getJoinedEvents(user.id, token);
     const today = getToday();
 
     // nothing joined yet

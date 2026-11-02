@@ -1,4 +1,4 @@
-import { getLoggedInUser } from "@/lib/session";
+import { getLoggedInUser, getServerToken } from "@/lib/session";
 import { getEventByHost, getJoinedEvents } from "@/lib/fetch";
 import { formatMonthYear } from "@/lib/date";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,8 +9,9 @@ import ProfileForm from "./ProfileForm";
 export default async function ProfileDetails() {
 
     const user = await getLoggedInUser();
-    const joinedEvents = await getJoinedEvents(user.id);
-    const hostedEvents = await getEventByHost(user.id);
+    const token = await getServerToken();
+    const joinedEvents = await getJoinedEvents(user.id, token);
+    const hostedEvents = await getEventByHost(user.id, token);
 
     const initials = user.name.split(" ").map((word) => word[0]).join("").slice(0, 2).toUpperCase();
 

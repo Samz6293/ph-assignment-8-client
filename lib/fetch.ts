@@ -1,7 +1,19 @@
 import { toast } from "sonner";
 import { EventData, HostEventDeatails, JoinedPerson, UpdateEvent } from "@/app/types";
+import { authClient } from "./auth-client";
 
 const baseurl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+
+const getClientToken = async() => {
+    const {data, error} = await authClient.token()
+    if(error) {
+        console.log(error);
+        return;
+    } 
+    const token = data.token;
+    return token;
+}
 
 export const handleHostEvent = async (hostEventDetails: HostEventDeatails) => {
     try {
@@ -57,9 +69,14 @@ export const getEventDetails = async (id: string): Promise<EventData | null> => 
     }
 }
 
-export const getEventByHost = async (id: string): Promise<EventData[]> => {
+// token comes from getServerToken() in the server component that calls this
+export const getEventByHost = async (id: string, token: string): Promise<EventData[]> => {
     try {
-        const res = await fetch(`${baseurl}/manage-events/${id}`);
+        const res = await fetch(`${baseurl}/manage-events/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         if (!res.ok) throw new Error("Couldn't load your events.");
         return await res.json();
     }
@@ -139,9 +156,14 @@ export const joinEvent = async (eventId: string, person: Omit<JoinedPerson, "joi
     }
 }
 
-export const getJoinedEvents = async (userId: string): Promise<EventData[]> => {
+// token comes from getServerToken() in the server component that calls this
+export const getJoinedEvents = async (userId: string, token: string): Promise<EventData[]> => {
     try {
-        const res = await fetch(`${baseurl}/joined-events/${userId}`);
+        const res = await fetch(`${baseurl}/joined-events/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         if (!res.ok) throw new Error("Couldn't load your joined events.");
         return await res.json();
     }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CalendarDays, History, Plus } from "lucide-react";
-import { getLoggedInUser } from "@/lib/session";
+import { getLoggedInUser, getServerToken } from "@/lib/session";
 import { getEventByHost } from "@/lib/fetch";
 import { formatDayMonth, getToday } from "@/lib/date";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,8 @@ import HostedEventsTable from "./HostedEventsTable";
 
 export default async function ManageEvents() {
     const user = await getLoggedInUser();
-    const events = await getEventByHost(user.id);
+    const token = await getServerToken();
+    const events = await getEventByHost(user.id, token);
     const today = getToday();
 
     const upcomingEvents = events.filter((event) => new Date(event.date) >= today);
