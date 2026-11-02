@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cacheLife } from "next/cache";
 import { Wifi } from "lucide-react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { navLinks, yourSpaceLinks } from "@/lib/navlinks";
 import { getCurrentYear } from "@/lib/date";
 
@@ -11,6 +12,7 @@ const exploreLinks = [...navLinks, { label: "Gallery", href: "/#gallery" }];
 const socialLinks = [
     { label: "GitHub", href: "https://github.com/Samz6293", icon: <FaGithub /> },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/sabbir-sameer/", icon: <FaLinkedinIn /> },
+    { label: "X", href: "https://x.com/SameerFMR", icon: <FaXTwitter /> },
 ];
 
 export default async function Footer() {
