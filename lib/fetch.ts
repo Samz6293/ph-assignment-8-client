@@ -48,42 +48,31 @@ export const getPastEvents = async() => {
 }
 
 export const getUpcomingEvents = async (limit?: number): Promise<EventData[]> => {
-    try {
-        const res = await fetch(`${baseurl}/events/upcoming${limit ? `?limit=${limit}` : ""}`);
-        if (!res.ok) throw new Error("Couldn't load events.");
-        return await res.json();
-    }
-    catch {
-        // show the empty state instead of crashing the page
-        return [];
-    }
+    const res = await fetch(`${baseurl}/events/upcoming${limit ? `?limit=${limit}` : ""}`);
+    if (!res.ok) throw new Error("Server down");
+    return await res.json();
 }
 
 export const getEventDetails = async (id: string): Promise<EventData | null> => {
-    try {
-        const res = await fetch(`${baseurl}/event-details/${id}`);
-        if (!res.ok) throw new Error("Couldn't load the event.");
-        const text = await res.text();
-        return text ? JSON.parse(text) : null; // the server sends an empty body when nothing is found
-    }
-    catch {
-        return null;
-    }
+    if (!/^[a-f0-9]{24}$/.test(id)) return null;
+
+    const res = await fetch(`${baseurl}/event-details/${id}`);
+    if (res.status >= 500) throw new Error("Server down");
+    if (!res.ok) return null;
+
+    const text = await res.text();
+    return text ? JSON.parse(text) : null; // the server sends an empty body when nothing is found
 }
 
 export const getEventByHost = async (id: string, token: string): Promise<EventData[]> => {
-    try {
-        const res = await fetch(`${baseurl}/manage-events/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        if (!res.ok) throw new Error("Couldn't load your events.");
-        return await res.json();
-    }
-    catch {
-        return [];
-    }
+    const res = await fetch(`${baseurl}/manage-events/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    if (res.status >= 500) throw new Error("Server down");
+    if (!res.ok) return []; // 401 / 403: no events to show
+    return await res.json();
 }
 
 export const deleteEvent = async (id: string) => {
@@ -175,18 +164,14 @@ export const joinEvent = async (eventId: string, person: Omit<JoinedPerson, "joi
 }
 
 export const getJoinedEvents = async (userId: string, token: string): Promise<EventData[]> => {
-    try {
-        const res = await fetch(`${baseurl}/joined-events/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        if (!res.ok) throw new Error("Couldn't load your joined events.");
-        return await res.json();
-    }
-    catch {
-        return [];
-    }
+    const res = await fetch(`${baseurl}/joined-events/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    if (res.status >= 500) throw new Error("Server down");
+    if (!res.ok) return []; // 401 / 403: no events to show
+    return await res.json();
 }
 
 export const leaveEvent = async (eventId: string, userId: string) => {

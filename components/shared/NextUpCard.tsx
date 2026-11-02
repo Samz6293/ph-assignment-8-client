@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { CalendarDays, Plus } from "lucide-react";
+import { EventData } from "@/app/types";
 import { getUpcomingEvents } from "@/lib/fetch";
 import { formatDate } from "@/lib/date";
 
 // shows the soonest upcoming event. Wrap it in <Suspense> wherever it's used (it fetches data)
 export default async function NextUpCard({ className }: { className?: string }) {
-    const events = await getUpcomingEvents(1);
+    // if the server is down, hide the card instead of breaking login and register
+    let events: EventData[] = [];
+    try {
+        events = await getUpcomingEvents(1);
+    }
+    catch {
+        return null;
+    }
     const nextEvent = events[0];
 
     // no upcoming events: invite the user to host one instead
