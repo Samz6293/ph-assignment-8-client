@@ -1,10 +1,11 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { LogOut } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -25,11 +26,15 @@ export default function AuthButtons({ className, onAction }: { className?: strin
         }
     }, [user]);
 
+    const [loggingOut, setLoggingOut] = useState(false);
+
     const handleLogout = async () => {
+        setLoggingOut(true);
         const success = await LogoutUser();
+        setLoggingOut(false);
         if (!success) return;
         onAction?.(); // close the mobile menu (does nothing on desktop)
-        router.push("/"); // leave private pages after logging out
+        router.push("/"); 
     }
 
     // keep the space empty while checking, so Login doesn't flash for logged-in users
@@ -70,10 +75,10 @@ export default function AuthButtons({ className, onAction }: { className?: strin
                         </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <Button variant="outline" size="lg" onClick={handleLogout}
+                    <Button variant="outline" size="lg" onClick={handleLogout} disabled={loggingOut}
                         className="hover:bg-danger-bg hover:text-danger hover:border-danger
                         dark:hover:bg-danger-bg dark:hover:border-danger">
-                        <LogOut /> Logout
+                        {loggingOut ? <><Spinner /> Logging out...</> : <><LogOut /> Logout</>}
                     </Button>
                 </>
                 :

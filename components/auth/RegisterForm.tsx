@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, CircleAlert, Eye, EyeOff, ImageIcon, Lock, Mail, UserRound, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaGoogle } from "react-icons/fa";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
@@ -17,6 +18,8 @@ export default function RegisterForm() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
     const router = useRouter();
 
     // password rules 
@@ -44,9 +47,18 @@ export default function RegisterForm() {
         // stop here if anything is invalid, the errors show under the inputs
         if (nameError || emailError || passwordError) return;
 
+        setLoading(true);
         const formData = { name, email, photoURL, password };
         const success = await RegisterUser(formData);
         if (success) router.push("/");
+        else setLoading(false);
+    }
+
+    // Google sends the browser to its own page, the spinner stays until it leaves
+    const handleGoogle = async () => {
+        setGoogleLoading(true);
+        await GoogleSignIn();
+        setGoogleLoading(false);
     }
 
     return (
@@ -142,13 +154,15 @@ export default function RegisterForm() {
                     </ul>
                 </Field>
 
-                <Button type="submit" size="lg" className="w-full">Create account</Button>
+                <Button type="submit" size="lg" disabled={loading} className="w-full">
+                    {loading ? <><Spinner /> Creating account...</> : "Create account"}
+                </Button>
 
                 <FieldSeparator className="text-xs">or</FieldSeparator>
 
-                <Button onClick={GoogleSignIn} type="button" variant="outline" size="lg" className="w-full bg-transparent border-ink/70
+                <Button onClick={handleGoogle} type="button" variant="outline" size="lg" disabled={googleLoading} className="w-full bg-transparent border-ink/70
                     dark:bg-transparent dark:border-ink/70">
-                    <FaGoogle /> Continue with Google
+                    {googleLoading ? <><Spinner /> Opening Google...</> : <><FaGoogle /> Continue with Google</>}
                 </Button>
 
                 <p className="text-muted-foreground text-center text-sm">

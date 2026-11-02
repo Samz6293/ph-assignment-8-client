@@ -5,6 +5,7 @@ import { formatDate } from "@/lib/date";
 import { Badge } from "@/components/ui/badge";
 import EventCard from "@/components/shared/EventCard";
 import NoEvents from "@/components/shared/NoEvents";
+import FilterChipLabel from "./FilterChipLabel";
 
 export default async function EventsBrowser({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
     const { type } = await searchParams;
@@ -31,7 +32,7 @@ export default async function EventsBrowser({ searchParams }: { searchParams: Pr
                                 ${isActive ? "bg-primary text-on-primary border-primary" : "bg-card text-foreground"}
                                 ${nothingScheduled && !isActive && "text-muted-foreground pointer-events-none"}
                                 hover:border-primary`}>
-                                {filter.label}
+                                <FilterChipLabel label={filter.label} />
                             </Badge>
                         );
                     })}

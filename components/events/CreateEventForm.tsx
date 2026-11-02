@@ -7,6 +7,7 @@ import { authClient } from "@/lib/auth-client";
 import { eventTypes } from "@/lib/eventTypes";
 import { formatDate, getTomorrow, isAfterToday } from "@/lib/date";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -31,6 +32,7 @@ export default function CreateEventForm() {
     const [description, setDescription] = useState("");
     const [dateOpen, setDateOpen] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [publishing, setPublishing] = useState(false);
     const router = useRouter();
 
     // error messages ("" means the field is fine)
@@ -57,10 +59,11 @@ export default function CreateEventForm() {
         if (titleError || typeError || dateError || locationError || thumbnailError || descriptionError) return;
 
         const hostEventDetails = { title, type, date: date!.toISOString(), location, thumbnail, description, hostEmail, hostName, hostID, hostImage };
+        setPublishing(true);
         const success = await handleHostEvent(hostEventDetails);
 
-        // assignment: after creating, go to the Upcoming Events page
         if (success) router.push("/upcoming-events");
+        else setPublishing(false);
     }
 
     return (
@@ -192,7 +195,9 @@ export default function CreateEventForm() {
                     {/* buttons */}
                     <div className="flex flex-col justify-start gap-3
                         sm:flex-row">
-                        <Button type="submit" size="lg">Publish event</Button>
+                        <Button type="submit" size="lg" disabled={publishing}>
+                            {publishing ? <><Spinner /> Publishing...</> : "Publish event"}
+                        </Button>
                         <Button variant="outline" size="lg" nativeButton={false} render={<Link href="/" />}
                             className="bg-transparent border-ink/70
                             dark:bg-transparent dark:border-ink/70">

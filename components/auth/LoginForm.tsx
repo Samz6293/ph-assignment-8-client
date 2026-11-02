@@ -6,6 +6,7 @@ import { ArrowRight, CircleAlert, Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import { GoogleSignIn, LoginUser } from "@/lib/user";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 
@@ -14,6 +15,8 @@ export default function LoginForm() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [googleLoading, setGoogleLoading] = useState(false);
     const router = useRouter();
 
     // error messages
@@ -31,9 +34,19 @@ export default function LoginForm() {
         // stop here if anything is invalid, the errors show under the inputs
         if (emailError || passwordError) return;
 
+        setLoading(true);
         const formData = { email, password };
         const success = await LoginUser(formData);
+
         if (success) router.push("/");
+        else setLoading(false);
+    }
+
+    // Google sends the browser to its own page, the spinner stays until it leaves
+    const handleGoogle = async () => {
+        setGoogleLoading(true);
+        await GoogleSignIn();
+        setGoogleLoading(false);
     }
 
     return (
@@ -81,15 +94,15 @@ export default function LoginForm() {
                     }
                 </Field>
 
-                <Button type="submit" size="lg" className="w-full">
-                    Login <ArrowRight />
+                <Button type="submit" size="lg" disabled={loading} className="w-full">
+                    {loading ? <><Spinner /> Logging in...</> : <>Login <ArrowRight /></>}
                 </Button>
 
                 <FieldSeparator className="text-xs">or</FieldSeparator>
 
-                <Button onClick={GoogleSignIn} type="button" variant="outline" size="lg" className="w-full bg-transparent border-ink/70
+                <Button onClick={handleGoogle} type="button" variant="outline" size="lg" disabled={googleLoading} className="w-full bg-transparent border-ink/70
                     dark:bg-transparent dark:border-ink/70">
-                    <FaGoogle /> Continue with Google
+                    {googleLoading ? <><Spinner /> Opening Google...</> : <><FaGoogle /> Continue with Google</>}
                 </Button>
 
                 <p className="text-muted-foreground text-center text-sm">

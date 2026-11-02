@@ -6,6 +6,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { JoinedPerson } from "@/app/types";
 import { joinEvent } from "@/lib/fetch";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import LeaveEventButton from "./LeaveEventButton";
 
 export default function JoinEventButton({ eventId, eventTitle, status, user }:
@@ -56,7 +57,7 @@ export default function JoinEventButton({ eventId, eventTitle, status, user }:
 
     return (
         <Button type="button" size="lg" disabled={joining} onClick={handleJoin} className="w-full">
-            {joining ? "Joining..." : "Join Event"}
+            {joining ? <><Spinner /> Joining...</> : "Join Event"}
         </Button>
     );
 }

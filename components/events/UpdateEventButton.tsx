@@ -6,6 +6,7 @@ import { EventData } from "@/app/types";
 import { eventTypes } from "@/lib/eventTypes";
 import { formatDate, getTomorrow, isAfterToday } from "@/lib/date";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -29,6 +30,7 @@ export default function UpdateEventButton({ event }: { event: EventData }) {
     const [description, setDescription] = useState(event.description);
     const [dateOpen, setDateOpen] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [saving, setSaving] = useState(false);
 
     // error messages 
     const titleError = title.trim().length < 5 ? "Title needs at least 5 characters." : "";
@@ -52,7 +54,9 @@ export default function UpdateEventButton({ event }: { event: EventData }) {
         if (titleError || typeError || dateError || locationError || thumbnailError || descriptionError) return;
 
         const updatedEvent = { title, type, date: date!.toISOString(), location, thumbnail, description };
+        setSaving(true);
         const success = await updateEvent(event._id, updatedEvent);
+        setSaving(false);
 
         if (success) {
             setOpen(false);
@@ -183,7 +187,9 @@ export default function UpdateEventButton({ event }: { event: EventData }) {
                             }>
                                 Cancel
                             </DialogClose>
-                            <Button type="submit" size="lg">Save changes</Button>
+                            <Button type="submit" size="lg" disabled={saving}>
+                                {saving ? <><Spinner /> Saving...</> : "Save changes"}
+                            </Button>
                         </div>
                     </FieldGroup>
                 </form>
