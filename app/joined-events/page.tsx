@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import JoinedEvents from "@/components/events/JoinedEvents";
+import JoinedEventsSkeleton from "@/components/events/JoinedEventsSkeleton";
 
 export const metadata: Metadata = {
     title: "Joined Events | Beacon",
@@ -22,11 +23,7 @@ export default function JoinedEventsPage() {
             <section className="bg-surface py-12
                 md:py-16">
                 <div className="container-page max-w-5xl">
-                    <Suspense fallback={
-                        <div className="flex flex-col gap-4">
-                            {[1, 2, 3].map((item) => <div key={item} className="skeleton h-28" />)}
-                        </div>
-                    }>
+                    <Suspense fallback={<JoinedEventsSkeleton />}>
                         <JoinedEvents />
                     </Suspense>
                 </div>

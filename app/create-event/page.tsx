@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import CreateEventForm from "@/components/events/CreateEventForm";
+import CreateEventSkeleton from "@/components/events/CreateEventSkeleton";
 
 export const metadata: Metadata = {
     title: "Create Event | Beacon",
@@ -25,7 +26,7 @@ export default function CreateEventPage() {
                 md:py-16">
                 <div className="container-page">
                     {/* the form reads today's date, so it renders in the browser, not at build time */}
-                    <Suspense fallback={<div className="skeleton h-180" />}>
+                    <Suspense fallback={<CreateEventSkeleton />}>
                         <CreateEventForm />
                     </Suspense>
                 </div>

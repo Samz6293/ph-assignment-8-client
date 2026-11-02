@@ -345,13 +345,6 @@ input:-webkit-autofill:focus {
     color: var(--danger);
   }
 
-  /* Loading -------------------------------------------------------------- */
-  .skeleton {
-    @apply animate-pulse;
-    border-radius: var(--radius-card);
-    background-color: var(--muted);
-  }
-
   /* Beacon rings motif — decoration only, mark up with aria-hidden ------- */
   .beacon-rings {
     pointer-events: none;

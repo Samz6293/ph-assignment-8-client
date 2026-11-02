@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import SectionHeading from "@/components/shared/SectionHeading";
 import UpcomingEventsList from "./UpcomingEventsList";
+import EventCardSkeleton from "@/components/shared/EventCardSkeleton";
 
 export default function UpcomingEvents() {
     return (
@@ -22,7 +23,7 @@ export default function UpcomingEvents() {
                 <Suspense fallback={
                     <div className="grid grid-cols-1 gap-6
                         md:grid-cols-2 lg:grid-cols-3">
-                        {[1, 2, 3].map((item) => <div key={item} className="skeleton h-96" />)}
+                        {[1, 2, 3].map((item) => <EventCardSkeleton key={item} />)}
                     </div>
                 }>
                     <UpcomingEventsList />

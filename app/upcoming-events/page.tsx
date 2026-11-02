@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import EventsBrowser from "@/components/events/EventsBrowser";
+import { Skeleton } from "@/components/ui/skeleton";
+import EventCardSkeleton from "@/components/shared/EventCardSkeleton";
 
 export const metadata: Metadata = {
     title: "Upcoming Events | Beacon",
@@ -25,10 +27,13 @@ export default function UpcomingEventsPage({ searchParams }: PageProps<"/upcomin
                 <div className="container-page">
                     <Suspense fallback={
                         <div className="flex flex-col gap-8">
-                            <div className="skeleton h-10 max-w-xl" />
+                            {/* filter chips */}
+                            <div className="flex flex-wrap gap-2">
+                                {[1, 2, 3, 4, 5, 6].map((item) => <Skeleton key={item} className="h-9 w-24 rounded-full" />)}
+                            </div>
                             <div className="grid grid-cols-1 gap-6
                                 md:grid-cols-2 lg:grid-cols-3">
-                                {[1, 2, 3, 4, 5, 6].map((item) => <div key={item} className="skeleton h-96" />)}
+                                {[1, 2, 3, 4, 5, 6].map((item) => <EventCardSkeleton key={item} />)}
                             </div>
                         </div>
                     }>

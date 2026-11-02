@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ManageEvents from "@/components/events/ManageEvents";
+import ManageEventsSkeleton from "@/components/events/ManageEventsSkeleton";
 
 export const metadata: Metadata = {
     title: "Manage Events | Beacon",
@@ -26,15 +27,7 @@ export default function ManageEventsPage() {
                 </div>
 
                 {/* reads the logged-in user and today's date, so it loads per visit */}
-                <Suspense fallback={
-                    <div className="flex flex-col gap-6">
-                        <div className="grid grid-cols-1 gap-4
-                            md:grid-cols-3">
-                            {[1, 2, 3].map((item) => <div key={item} className="skeleton h-28" />)}
-                        </div>
-                        <div className="skeleton h-96" />
-                    </div>
-                }>
+                <Suspense fallback={<ManageEventsSkeleton />}>
                     <ManageEvents />
                 </Suspense>
             </div>
