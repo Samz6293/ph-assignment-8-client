@@ -59,11 +59,21 @@ export default function CreateEventForm() {
         if (titleError || typeError || dateError || locationError || thumbnailError || descriptionError) return;
 
         const hostEventDetails = { title, type, date: date!.toISOString(), location, thumbnail, description, hostEmail, hostName, hostID, hostImage };
+
         setPublishing(true);
         const success = await handleHostEvent(hostEventDetails);
+        setPublishing(false);
+        if (!success) return;
 
-        if (success) router.push("/upcoming-events");
-        else setPublishing(false);
+        setTitle("");
+        setType("");
+        setDate(undefined);
+        setLocation("");
+        setThumbnail("");
+        setDescription("");
+        setSubmitted(false);
+
+        router.push("/upcoming-events");
     }
 
     return (
