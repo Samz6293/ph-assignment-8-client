@@ -8,7 +8,6 @@ export async function getLoggedInUser() {
     return session.user;
 }
 
-// server only: the logged-in user's JWT, sent to the Express API as "Authorization: Bearer <token>"
 export async function getServerToken() {
     const jwtToken = await auth.api.getToken({ headers: await headers() });
     return jwtToken?.token || "";
